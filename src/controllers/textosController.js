@@ -113,9 +113,6 @@ class TextoController {
         
         let METODO = req.params.metodo
 
-        console.log(req.params);
-        console.log(METODO);
-
         const querySelect = `EXEC SP_slendermooth_options @METODO = '${METODO}' `
        
         sqlMSSQL.connect(config, function (err) {
@@ -145,7 +142,7 @@ class TextoController {
         console.log(imovel);
 
         const querySelect = ` EXEC SP_slendermooth_imoveis
-                              @METODO                        = '${imovel.metodo}'
+                              @METODO                        = 'CADASTRAR_IMOVEL'
                              ,@DESCRICAO_TITULO_IMOVEL       = '${imovel.descricaoTituloImovel}'
                              ,@VALOR_IMOVEL                  = '${imovel.valorImovel}'
                              ,@VALOR_MINIMO_IMOVEL           = '${imovel.valorMinimoImovel}'
@@ -159,17 +156,17 @@ class TextoController {
                              ,@QUANTIDADE_LAVANDERIA         = '${imovel.quantidadeLavanderia}'
                              ,@QUANTIDADE_SALA_ESTAR         = '${imovel.quantidadeSalaEstar}'
                              ,@VAGAS_GARAGEM                 = '${imovel.quantidadeVagasGaragem}'
-                             ,@ID_CONDOMINIO                 = '${imovel.idCondominio}'
-                             ,@ANDAR_ALTURA                  = '${imovel.andarAltura}'
+                             ,@ID_CONDOMINIO                 = '1'
+                             ,@ANDAR_ALTURA                  = '4'
                              ,@METROS_QUADRADOS_TERRENO      = '${imovel.metrosQuadradosTerreno}'
                              ,@METROS_QUADRADOS_CONSTRUIDOS  = '${imovel.metrosQuadradosConstruidos}'
                              ,@ID_MATERIAL                   = '${imovel.idMaterial}'
-                             ,@ID_USUARIO                    = '0' 
-                             ,@MOBILIADO                     = '${imovel.mobiliado}'
-                             ,@ELEVADOR                      = '${imovel.mobiliado}'
-                             ,@PISCINA                       = '${imovel.mobiliado}'
-                             ,@PORTARIA                      = '${imovel.mobiliado}'
-                             ,@SALAO_FESTAS                  = '${imovel.mobiliado}'
+                             ,@ID_USUARIO                    = '1' 
+                             ,@MOBILIADO                     = '0'
+                             ,@ELEVADOR                      = '${imovel.checkElevador}'
+                             ,@PISCINA                       = '${imovel.checkPiscina}'
+                             ,@PORTARIA                      = '${imovel.checkPortaria}'
+                             ,@SALAO_FESTAS                  = '${imovel.checkSalaoFesta}'
                              ,@DESCRICAO_COMPLETA_IMOVEL     = '${imovel.descricaoCompletaImovel}' `
 
         sqlMSSQL.connect(config, function (err) {
@@ -190,6 +187,42 @@ class TextoController {
             });
         });
     }
+
+
+
+    static cadastrarEstados = (req, res) => {
+        
+        let todosEstados = req.body
+        var query = `INSERT INTO BETA_ESTADOS (Sigla, Nome, Codigo) VALUES `
+
+        for(var key in todosEstados){
+            query = query + `('${todosEstados[key].sigla}', '${todosEstados[key].nome}', '${todosEstados[key].id}'),`
+        }
+        
+        //Remove ultima vírgula
+        query = query.substring(0, query.length - 1);
+        console.log(query)
+
+
+        sqlMSSQL.connect(config, function (err) {
+    
+            if (err) console.log(err);
+    
+            // create Request object
+            var request = new sqlMSSQL.Request();
+    
+            request.query(query, function (err, recordset) {
+    
+                if (err) console.log(err)
+
+                console.log(recordset);
+
+                if(!err) res.status(200).send("Sucesso!")
+    
+            });
+        });
+    }
+
 
 
 

@@ -9,7 +9,8 @@ router
 
     .get('/select_options/:metodo',    TextoController.buscaOptions)
     
-    .post('/sandbox',               TextoController.cadastrarImovel)
+    .post('/imovel/cadastrar',               TextoController.cadastrarImovel)
+    .post('/cadastrarEstados',               TextoController.cadastrarEstados)
 
     .get('/textos',      TextoController.listarTextos)
     .get('/textos/:id',  TextoController.listarTextoPorId)

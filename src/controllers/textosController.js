@@ -82,9 +82,6 @@ class TextoController {
         
         let ID_IMOVEL = req.params.id
 
-        console.log(req.params);
-        console.log(ID_IMOVEL);
-
         const querySelect = `EXEC SP_slendermooth_imoveis @METODO = 'CONSULTAR_IMOVEL', @ID_IMOVEL = '${ID_IMOVEL}' `
        
         sqlMSSQL.connect(config, function (err) {
@@ -99,6 +96,34 @@ class TextoController {
                 if (err) console.log(err)
 
                 console.log(recordset);
+
+                if(!err) res.status(200).send(recordset)
+    
+            });
+        });
+    }
+
+
+    static consultarCondominio = (req, res) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        
+        let ID_CONDOMINIO = req.params.id
+
+        const querySelect = `EXEC SP_slendermooth_imoveis @METODO = 'CONSULTAR_CONDOMINIO', @ID_CONDOMINIO = '${ID_CONDOMINIO}' `
+       
+        sqlMSSQL.connect(config, function (err) {
+    
+            if (err) console.log(err);
+    
+            // create Request object
+            var request = new sqlMSSQL.Request();
+    
+            request.query(querySelect, function (err, recordset) {
+    
+                if (err) console.log(err)
+
+                console.log("aqui: "+recordset);
 
                 if(!err) res.status(200).send(recordset)
     
@@ -139,7 +164,7 @@ class TextoController {
 
         let imovel = req.body
 
-        console.log(imovel);
+        //console.log(imovel);
 
         const querySelect = ` EXEC SP_slendermooth_imoveis
                               @METODO                        = 'CADASTRAR_IMOVEL'
@@ -156,7 +181,7 @@ class TextoController {
                              ,@QUANTIDADE_LAVANDERIA         = '${imovel.quantidadeLavanderia}'
                              ,@QUANTIDADE_SALA_ESTAR         = '${imovel.quantidadeSalaEstar}'
                              ,@VAGAS_GARAGEM                 = '${imovel.quantidadeVagasGaragem}'
-                             ,@ID_CONDOMINIO                 = '1'
+                             ,@ID_CONDOMINIO                 = '${imovel.idCondominio}'
                              ,@ANDAR_ALTURA                  = '4'
                              ,@METROS_QUADRADOS_TERRENO      = '${imovel.metrosQuadradosTerreno}'
                              ,@METROS_QUADRADOS_CONSTRUIDOS  = '${imovel.metrosQuadradosConstruidos}'

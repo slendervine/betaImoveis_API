@@ -7,6 +7,8 @@ router
     .get('/consulta',               TextoController.consultarImoveis)
     .get('/consulta_imovel/:id',    TextoController.consultarImovel)
 
+    .get('/consulta_condominio/:id',    TextoController.consultarCondominio)
+
     .get('/select_options/:metodo',    TextoController.buscaOptions)
     
     .post('/imovel/cadastrar',               TextoController.cadastrarImovel)
